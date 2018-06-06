@@ -1,7 +1,7 @@
-package com.example.hector.mercadolibre;
+package com.example.hector.mercadolibre.main.method;
 
 import com.example.hector.mercadolibre.models.PaymentMethod;
 
-public interface OnPaymentMethodInteractionListener {
+interface OnPaymentMethodInteractionListener {
     void itemSelected(PaymentMethod paymentMethod);
 }

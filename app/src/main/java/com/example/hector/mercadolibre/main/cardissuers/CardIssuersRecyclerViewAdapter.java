@@ -15,14 +15,14 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class CardIssuersRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<CardIssuers> cardIssuersList;
+class CardIssuersRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private final List<CardIssuers> cardIssuersList;
     private final OnCardIssuersInteractionListener mListener;
-    private Context context;
+    private final Context context;
 
-    public static class ViewHolder2 extends RecyclerView.ViewHolder {
-        ImageView mIcon;
-        TextView mTextView;
+    static class ViewHolder2 extends RecyclerView.ViewHolder {
+        final ImageView mIcon;
+        final TextView mTextView;
         ViewHolder2(View view) {
             super(view);
             mTextView = view.findViewById(R.id.profileItem_TextView);

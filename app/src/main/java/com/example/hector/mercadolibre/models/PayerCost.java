@@ -1,14 +1,27 @@
 package com.example.hector.mercadolibre.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class PayerCost {
+    @SerializedName("installments")
+    private String installments;
+    @SerializedName("recommended_message")
     private String recommendedMessage;
-    private int installmentAmount;
+    @SerializedName("total_amount")
     private int totalAmount;
 
-    public PayerCost(String recommendedMessage, int installmentAmount, int totalAmount) {
+    public PayerCost(String installments, String recommendedMessage, int totalAmount) {
+        this.installments = installments;
         this.recommendedMessage = recommendedMessage;
-        this.installmentAmount = installmentAmount;
         this.totalAmount = totalAmount;
+    }
+
+    public String getInstallments() {
+        return installments;
+    }
+
+    public void setInstallments(String installments) {
+        this.installments = installments;
     }
 
     public String getRecommendedMessage() {
@@ -19,14 +32,6 @@ public class PayerCost {
         this.recommendedMessage = recommendedMessage;
     }
 
-    public int getInstallmentAmount() {
-        return installmentAmount;
-    }
-
-    public void setInstallmentAmount(int installmentAmount) {
-        this.installmentAmount = installmentAmount;
-    }
-
     public int getTotalAmount() {
         return totalAmount;
     }
@@ -34,10 +39,4 @@ public class PayerCost {
     public void setTotalAmount(int totalAmount) {
         this.totalAmount = totalAmount;
     }
-
-    /*
-     "recommended_message": "1 cuota de $ 40.000,00 ($ 40.000,00)",
-        "installment_amount": 40000,
-        "total_amount": 40000
-     */
 }

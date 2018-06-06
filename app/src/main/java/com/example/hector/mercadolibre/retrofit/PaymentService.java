@@ -7,8 +7,6 @@ import com.example.hector.mercadolibre.models.PaymentMethod;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
@@ -20,5 +18,5 @@ public interface PaymentService {
     Call<List<CardIssuers>> getCardIssuers(@Query("public_key") String publicKey, @Query("payment_method_id") String paymentMethodId);
 
     @GET("payment_methods/installments")
-    Call<List<Installment>> getInstallment(@Query("public_key") String publicKey, @Query("payment_method_id") String paymentMethodId, @Query("issuer.id") String issuerId);
+    Call<List<Installment>> getInstallment(@Query("public_key") String publicKey, @Query("amount") int amount, @Query("payment_method_id") String paymentMethodId, @Query("issuer.id") String issuerId);
 }

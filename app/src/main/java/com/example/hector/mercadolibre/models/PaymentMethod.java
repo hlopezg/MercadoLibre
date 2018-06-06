@@ -80,14 +80,4 @@ public class PaymentMethod {
     public void setMaxAllowedAmount(String maxAllowedAmount) {
         this.maxAllowedAmount = maxAllowedAmount;
     }
-
-    /*"id": "visa",
-            "name": "Visa",
-            "payment_type_id": "credit_card",
-            "status": "active",
-            "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/visa.gif",
-            "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/visa.gif",
-             "min_allowed_amount": 2,
-    "max_allowed_amount": 250000,
-            */
 }

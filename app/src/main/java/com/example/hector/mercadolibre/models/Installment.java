@@ -1,19 +1,52 @@
 package com.example.hector.mercadolibre.models;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
 public class Installment {
-    private PaymentMethod paymentMethod;
-    private CardIssuers cardIssuers;
-    private PayerCost payerCost;
-    /*
-    "payment_method_id": "visa",
-    "payment_type_id": "credit_card",
-    "issuer": {
-      "id": "272",
-      "name": "Banco Comafi",
-      "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/272.gif",
-      "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/272.gif"
-    },
-    "processing_mode": "aggregator",
-    "merchant_account_id": null,
-     */
+    private String payment_method_id;
+    private String payment_type_id;
+    private CardIssuers issuer;
+    @SerializedName("payer_costs")
+    private List<PayerCost> payerCosts;
+
+    public Installment(String payment_method_id, String payment_type_id, CardIssuers issuer, List<PayerCost> payerCosts) {
+        this.payment_method_id = payment_method_id;
+        this.payment_type_id = payment_type_id;
+        this.issuer = issuer;
+        this.payerCosts = payerCosts;
+    }
+
+    public String getPayment_method_id() {
+        return payment_method_id;
+    }
+
+    public void setPayment_method_id(String payment_method_id) {
+        this.payment_method_id = payment_method_id;
+    }
+
+    public String getPayment_type_id() {
+        return payment_type_id;
+    }
+
+    public void setPayment_type_id(String payment_type_id) {
+        this.payment_type_id = payment_type_id;
+    }
+
+    public CardIssuers getIssuer() {
+        return issuer;
+    }
+
+    public void setIssuer(CardIssuers issuer) {
+        this.issuer = issuer;
+    }
+
+    public List<PayerCost> getPayer_costs() {
+        return payerCosts;
+    }
+
+    public void setPayer_costs(List<PayerCost> payerCosts) {
+        this.payerCosts = payerCosts;
+    }
 }

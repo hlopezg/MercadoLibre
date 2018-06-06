@@ -4,17 +4,18 @@ public class Payment {
     private int amount;
     private PaymentMethod paymentMethod;
     private CardIssuers cardIssuers;
-    private Installment installment;
+    private PayerCost payerCost;
 
     public Payment(){
 
     }
 
-    public Payment(int amount, PaymentMethod paymentMethod, CardIssuers cardIssuers, Installment installment) {
+    public Payment(int amount, PaymentMethod paymentMethod, CardIssuers cardIssuers, PayerCost payerCost) {
         this.amount = amount;
         this.paymentMethod = paymentMethod;
         this.cardIssuers = cardIssuers;
         this.cardIssuers = cardIssuers;
+        this.payerCost = payerCost;
     }
 
     public int getAmount() {
@@ -41,11 +42,11 @@ public class Payment {
         this.cardIssuers = cardIssuers;
     }
 
-    public Installment getInstallment() {
-        return installment;
+    public PayerCost getPayerCost() {
+        return payerCost;
     }
 
-    public void setInstallment(Installment installment) {
-        this.installment = installment;
+    public void setPayerCost(PayerCost payerCost) {
+        this.payerCost = payerCost;
     }
 }

@@ -1,4 +1,4 @@
-package com.example.hector.mercadolibre.main.cardissuers;
+package com.example.hector.mercadolibre.main.installment;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -19,8 +19,8 @@ import android.widget.TextView;
 import com.example.hector.mercadolibre.MainActivityListener;
 import com.example.hector.mercadolibre.R;
 import com.example.hector.mercadolibre.Utilities.Methods;
-import com.example.hector.mercadolibre.models.CardIssuers;
-import com.example.hector.mercadolibre.presenter.PaymentCardIssuersPresenter;
+import com.example.hector.mercadolibre.models.PayerCost;
+import com.example.hector.mercadolibre.presenter.PaymentInstallmentPresenter;
 import com.example.hector.mercadolibre.presenter.PaymentMVP;
 
 import java.util.List;
@@ -28,21 +28,24 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CardIssuersFragment extends Fragment implements OnCardIssuersInteractionListener, PaymentMVP.PaymentCardIssuersView {
-    @BindView(R.id.card_issuers_recyclerview) RecyclerView mRecyclerViewCardIssuers;
-    @BindView(R.id.no_data_textview)
-    TextView mTextViewNoData;
+public class InstallmentFragment extends Fragment implements OnInstallmentInteractionListener, PaymentMVP.PaymentInstallmentView {
+    @BindView(R.id.installment_recyclerview) RecyclerView mRecyclerViewInstallment;
+    @BindView(R.id.no_data_textview) TextView mTextViewNoData;
 
-    private PaymentMVP.PaymentCardIssuersPresenter cardIssuersPresenter;
+    private PaymentMVP.PaymentInstallmentPresenter installmentPresenter;
     private FragmentActivity fragmentActivity;
     private MainActivityListener mListener;
 
     private String paymentMethodId;
+    private String issuerId;
+    private int amount;
 
-    public static CardIssuersFragment newInstance(String paymentMethodId) {
-        CardIssuersFragment cardIssuersFragment = new CardIssuersFragment();
+    public static InstallmentFragment newInstance(int amount, String paymentMethodId, String issuerId) {
+        InstallmentFragment cardIssuersFragment = new InstallmentFragment();
         Bundle args = new Bundle();
+        args.putInt("amount", amount);
         args.putString("paymentMethodId", paymentMethodId);
+        args.putString("issuerId", issuerId);
         cardIssuersFragment.setArguments(args);
         return cardIssuersFragment;
     }
@@ -51,25 +54,27 @@ public class CardIssuersFragment extends Fragment implements OnCardIssuersIntera
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            amount = getArguments().getInt("amount");
             paymentMethodId = getArguments().getString("paymentMethodId");
+            issuerId = getArguments().getString("issuerId");
         }
     }
 
-    public CardIssuersFragment() {
+    public InstallmentFragment() {
         // Required empty public constructor
     }
 
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View viewRoot = inflater.inflate(R.layout.fragment_card_issuers, container, false);
+        View viewRoot = inflater.inflate(R.layout.fragment_installment, container, false);
 
         ButterKnife.bind(this, viewRoot);
 
-        cardIssuersPresenter = new PaymentCardIssuersPresenter();
+        installmentPresenter = new PaymentInstallmentPresenter();
 
         if(Methods.isNetworkAvailable(fragmentActivity))
-            cardIssuersPresenter.getCardIssuers(getContext(), paymentMethodId);
+            installmentPresenter.getInstallment(getContext(), amount, paymentMethodId, issuerId);
         else{
             mListener.hideProgressLayout();
             mListener.goToNoNetwork();
@@ -77,23 +82,23 @@ public class CardIssuersFragment extends Fragment implements OnCardIssuersIntera
         return viewRoot;
     }
 
-    private void setRecyclerView(List<CardIssuers> cardIssuersList){
+    private void setRecyclerView(List<PayerCost> payerCostList){
         if(fragmentActivity != null){
-            if(cardIssuersList.size() == 0){
+            if(payerCostList.size() == 0){
                 mTextViewNoData.setVisibility(View.VISIBLE);
                 return;
             }
 
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(fragmentActivity);
-            mRecyclerViewCardIssuers.setLayoutManager(layoutManager);
-            mRecyclerViewCardIssuers.setAdapter(new CardIssuersRecyclerViewAdapter(fragmentActivity, cardIssuersList, this));
-            mRecyclerViewCardIssuers.setHasFixedSize(true);
+            mRecyclerViewInstallment.setLayoutManager(layoutManager);
+            mRecyclerViewInstallment.setAdapter(new InstallmentRecyclerViewAdapter(payerCostList, this));
+            mRecyclerViewInstallment.setHasFixedSize(true);
 
             DividerItemDecoration horizontalDecoration = new DividerItemDecoration(fragmentActivity, DividerItemDecoration.VERTICAL);
             Drawable horizontalDivider = ContextCompat.getDrawable(fragmentActivity, R.drawable.horizontal_divider);
             if (horizontalDivider != null) {
                 horizontalDecoration.setDrawable(horizontalDivider);
-                mRecyclerViewCardIssuers.addItemDecoration(horizontalDecoration);
+                mRecyclerViewInstallment.addItemDecoration(horizontalDecoration);
             }
         }
     }
@@ -101,7 +106,7 @@ public class CardIssuersFragment extends Fragment implements OnCardIssuersIntera
     @Override
     public void onResume() {
         super.onResume();
-        cardIssuersPresenter.setView(this);
+        installmentPresenter.setView(this);
     }
 
     @Override
@@ -126,23 +131,23 @@ public class CardIssuersFragment extends Fragment implements OnCardIssuersIntera
     }
 
     @Override
-    public void itemSelected(CardIssuers cardIssuers) {
-        if(mListener != null)
-            mListener.goToInstallment(cardIssuers);
-    }
-
-    @Override
-    public void onSuccesfullGetCardIssuers(List<CardIssuers> cardIssuersList) {
-        setRecyclerView(cardIssuersList);
+    public void onSuccesfullGetInstallment(List<PayerCost> payerCost) {
+        setRecyclerView(payerCost);
         if(mListener != null)
             mListener.hideProgressLayout();
     }
 
     @Override
-    public void onFailureGetCardIssuers() {
+    public void onFailureGetInstallment() {
         if(mListener != null){
             mListener.toast(getString(R.string.no_data_from_request));
             mListener.hideProgressLayout();
         }
+    }
+
+    @Override
+    public void itemSelected(PayerCost payerCost) {
+        if(mListener != null)
+            mListener.goToSummary(payerCost);
     }
 }

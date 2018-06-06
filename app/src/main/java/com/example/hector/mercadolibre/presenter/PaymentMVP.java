@@ -3,6 +3,7 @@ package com.example.hector.mercadolibre.presenter;
 import android.content.Context;
 
 import com.example.hector.mercadolibre.models.CardIssuers;
+import com.example.hector.mercadolibre.models.PayerCost;
 import com.example.hector.mercadolibre.models.PaymentMethod;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface PaymentMVP {
     }
 
     interface PaymentInstallmentView{
-        void onSuccesfullGetInstallment();
+        void onSuccesfullGetInstallment(List<PayerCost> payerCost);
         void onFailureGetInstallment();
     }
 
@@ -35,6 +36,6 @@ public interface PaymentMVP {
 
     interface PaymentInstallmentPresenter{
         void setView(PaymentInstallmentView view);
-        void getInstallment(Context context, String paymentMethodId, String issuerId);
+        void getInstallment(Context context, int amount, String paymentMethodId, String issuerId);
     }
 }

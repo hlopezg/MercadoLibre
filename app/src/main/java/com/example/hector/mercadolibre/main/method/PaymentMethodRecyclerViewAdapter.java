@@ -1,4 +1,4 @@
-package com.example.hector.mercadolibre.Utilities;
+package com.example.hector.mercadolibre.main.method;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,21 +9,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.hector.mercadolibre.OnPaymentMethodInteractionListener;
+import com.example.hector.mercadolibre.main.method.OnPaymentMethodInteractionListener;
 import com.example.hector.mercadolibre.R;
 import com.example.hector.mercadolibre.models.PaymentMethod;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class PaymentMethodRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<PaymentMethod> paymentMethodList;
+class PaymentMethodRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private final List<PaymentMethod> paymentMethodList;
     private final OnPaymentMethodInteractionListener mListener;
-    private Context context;
+    private final Context context;
 
-    public static class ViewHolder2 extends RecyclerView.ViewHolder {
-        ImageView mIcon;
-        TextView mTextView;
+    static class ViewHolder2 extends RecyclerView.ViewHolder {
+        final ImageView mIcon;
+        final TextView mTextView;
         ViewHolder2(View view) {
             super(view);
             mTextView = view.findViewById(R.id.profileItem_TextView);

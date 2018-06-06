@@ -1,4 +1,4 @@
-package com.example.hector.mercadolibre;
+package com.example.hector.mercadolibre.main.method;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -13,8 +13,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.example.hector.mercadolibre.Utilities.PaymentMethodRecyclerViewAdapter;
+import com.example.hector.mercadolibre.MainActivityListener;
+import com.example.hector.mercadolibre.R;
+import com.example.hector.mercadolibre.Utilities.Methods;
 import com.example.hector.mercadolibre.models.PaymentMethod;
 import com.example.hector.mercadolibre.presenter.PaymentMVP;
 import com.example.hector.mercadolibre.presenter.PaymentMethodPresenter;
@@ -26,6 +29,7 @@ import butterknife.ButterKnife;
 
 public class PaymentMethodFragment extends Fragment implements OnPaymentMethodInteractionListener, PaymentMVP.PaymentMethodView{
     @BindView(R.id.payment_method_recyclerview) RecyclerView mRecyclerViewPaymentMethod;
+    @BindView(R.id.no_data_textview) TextView mTextViewNoData;
 
     private PaymentMVP.PaymentMethodPresenter paymentPresenter;
     private MainActivityListener mListener;
@@ -47,14 +51,23 @@ public class PaymentMethodFragment extends Fragment implements OnPaymentMethodIn
         ButterKnife.bind(this, rootView);
 
         paymentPresenter = new PaymentMethodPresenter();
-        paymentPresenter.getPaymentMethod(getContext());
-
+        if(Methods.isNetworkAvailable(fragmentActivity))
+            paymentPresenter.getPaymentMethod(getContext());
+        else{
+            mListener.hideProgressLayout();
+            mListener.goToNoNetwork();
+        }
 
         return rootView;
     }
 
     private void setRecyclerView(List<PaymentMethod> paymentMethodList){
         if(fragmentActivity != null){
+            if(paymentMethodList.size() == 0){
+                mTextViewNoData.setVisibility(View.VISIBLE);
+                return;
+            }
+
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(fragmentActivity);
             mRecyclerViewPaymentMethod.setLayoutManager(layoutManager);
             mRecyclerViewPaymentMethod.setAdapter(new PaymentMethodRecyclerViewAdapter(fragmentActivity, paymentMethodList, this));
@@ -99,12 +112,16 @@ public class PaymentMethodFragment extends Fragment implements OnPaymentMethodIn
     @Override
     public void onSuccesfullGetPaymentMethod(List<PaymentMethod> paymentMethodList) {
         setRecyclerView(paymentMethodList);
-        mListener.hideProgressLayout();
+        if(mListener != null)
+            mListener.hideProgressLayout();
     }
 
     @Override
     public void onFailureGetPaymentMethod() {
-        mListener.hideProgressLayout();
+        if(mListener != null){
+            mListener.toast(getString(R.string.no_data_from_request));
+            mListener.hideProgressLayout();
+        }
     }
 
     @Override

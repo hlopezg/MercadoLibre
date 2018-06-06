@@ -1,10 +1,14 @@
 package com.example.hector.mercadolibre.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class CardIssuers {
     private int id;
     private String name;
+    @SerializedName("secure_thumbnail")
     private String secureThumbnail;
     private String thumbnail;
+    @SerializedName("merchant_account_id")
     private String merchantAccountId;
 
     public CardIssuers(int id, String name, String secureThumbnail, String thumbnail, String merchantAccountId) {
@@ -54,13 +58,4 @@ public class CardIssuers {
     public void setMerchantAccountId(String merchantAccountId) {
         this.merchantAccountId = merchantAccountId;
     }
-
-    /*
-     "id": "288",
-    "name": "Tarjeta Shopping",
-    "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/288.gif",
-    "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/288.gif",
-    "processing_mode": "aggregator",
-    "merchant_account_id": null
-     */
 }

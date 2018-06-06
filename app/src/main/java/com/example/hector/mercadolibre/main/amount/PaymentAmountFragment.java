@@ -1,19 +1,26 @@
-package com.example.hector.mercadolibre;
+package com.example.hector.mercadolibre.main.amount;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.design.widget.TextInputEditText;
 import android.widget.Button;
+import android.widget.TextView;
+
+import com.example.hector.mercadolibre.MainActivityListener;
+import com.example.hector.mercadolibre.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class PaymentAmountFragment extends Fragment {
+    @BindView(R.id.text_input_layout) TextInputLayout mTextInputLayout;
     @BindView(R.id.amount_input) TextInputEditText mTextInputEditTextAmountInput;
     @BindView(R.id.amount_input_button) Button mButtonAmountInput;
     private MainActivityListener mListener;
@@ -28,20 +35,32 @@ public class PaymentAmountFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_payment_amount, container, false);
-        ButterKnife.setDebug(true);
+
         ButterKnife.bind(this, rootView);
 
-        mButtonAmountInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int amount = Integer.valueOf(mTextInputEditTextAmountInput.getText().toString());
-                mListener.goToPaymentMethod(amount);
+        mButtonAmountInput.setOnClickListener(view -> {
+            String amount = mTextInputEditTextAmountInput.getText().toString();
+            if(validate(mTextInputEditTextAmountInput, amount)){
+                mListener.goToPaymentMethod(Integer.valueOf(amount));
             }
         });
 
         return rootView;
+    }
+
+    private boolean validate(TextView textView, String text) {
+        if(text.isEmpty()){
+            textView.setError(getString(R.string.error_must_enter_a_value));
+            return false;
+        }else if (!TextUtils.isDigitsOnly(text)){
+            textView.setError(getString(R.string.error_is_not_a_number));
+            return false;
+        }else if(Integer.valueOf(text) <= 0){
+            textView.setError(getString(R.string.error_value_must_be_greather_than_cero));
+            return false;
+        }else
+            return true;
     }
 
     @Override
